@@ -19,6 +19,8 @@ func main() {
   func doNothing() {
     fmt.Println("This function does nothing.")
     //^_^
+	//-:-
+
   }
 
 }
