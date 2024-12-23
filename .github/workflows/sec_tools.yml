@@ -29,7 +29,7 @@ jobs:
           curl -sfL https://raw.githubusercontent.com/securego/gosec/master/install.sh | sh -s -- -b $GITHUB_WORKSPACE
           ./gosec ./...
 
-      # Run Snyk
+      # Run Snyk ///
       - name: Run Snyk
         uses: snyk/actions@v1
         env:
