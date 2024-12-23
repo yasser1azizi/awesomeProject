@@ -1,0 +1,49 @@
+name: CI Pipeline with Security Tools
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  security-scan:
+    runs-on: ubuntu-latest
+    
+    steps:
+      # Checkout Code
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      # Run Semgrep
+      - name: Run Semgrep
+        uses: returntocorp/semgrep-action@v1
+        with:
+          config: "p/r2c-ci"
+
+      # Run GoSec
+      - name: Run GoSec
+        run: |
+          curl -sfL https://raw.githubusercontent.com/securego/gosec/master/install.sh | sh -s -- -b $GITHUB_WORKSPACE
+          ./gosec ./...
+
+      # Run Snyk
+      - name: Run Snyk
+        uses: snyk/actions@v1
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        with:
+          args: test
+
+      # Run SonarQube (if using SonarCloud)
+      - name: Run SonarQube Analysis
+        uses: sonarsource/sonarcloud-github-action@master
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        with:
+          args: >
+            -Dsonar.projectKey=my-project
+            -Dsonar.organization=my-org
+            -Dsonar.sources=.
