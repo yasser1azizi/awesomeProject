@@ -16,6 +16,7 @@ func main() {
 	if err := http.ListenAndServe(":"+port, nil); err != nil {
 		log.Fatalf("Server failed: %s", err)
 	}
+
   func doNothing() {
     fmt.Println("This function does nothing.")
     //^_^

@@ -29,13 +29,19 @@ jobs:
           curl -sfL https://raw.githubusercontent.com/securego/gosec/master/install.sh | sh -s -- -b $GITHUB_WORKSPACE
           ./gosec ./...
 
-      # Run Snyk ///
-      - name: Run Snyk
-        uses: snyk/actions@v2
+      # Set up Snyk
+      - name: Set up Snyk
+        uses: snyk/actions/setup@v2
+        with:
+          version: 'latest'
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-        with:
-          args: test
+
+      # Run Snyk Test
+      - name: Run Snyk Test
+        run: snyk test
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
 
       # Run SonarQube (if using SonarCloud)
       - name: Run SonarQube Analysis
