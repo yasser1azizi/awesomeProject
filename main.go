@@ -17,11 +17,4 @@ func main() {
 		log.Fatalf("Server failed: %s", err)
 	}
 
-  func doNothing() {
-    fmt.Println("This function does nothing.")
-    //^_^
-
-
-  }
-
 }
