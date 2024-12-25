@@ -10,7 +10,7 @@ on:
 
 jobs:
   security-scan:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-22.04  # Explizite Angabe der Ubuntu-Version
 
     steps:
       # Checkout Code
