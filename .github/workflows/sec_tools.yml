@@ -10,7 +10,7 @@ on:
 
 jobs:
   security-scan:
-    runs-on: ubuntu-22.04  # Explizite Angabe der Ubuntu-Version
+    runs-on: ubuntu-22.04  # Explicit Ubuntu version
 
     steps:
       # Checkout Code
@@ -29,13 +29,11 @@ jobs:
           curl -sfL https://raw.githubusercontent.com/securego/gosec/master/install.sh | sh -s -- -b $GITHUB_WORKSPACE
           ./gosec ./...
 
-      ## Set up Snyk
+      # Set up Snyk
       - name: Set up Snyk
         uses: snyk/actions/setup@v2
         with:
           version: 'latest'
-        env:
-          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
 
       # Run Snyk Test
       - name: Run Snyk Test
