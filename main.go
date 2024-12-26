@@ -2,33 +2,36 @@
 package main
 
 import (
+
 	"errors"
 	"fmt"
+
 )
 
-func main() {
-	port := "8080"
-	mux := http.NewServeMux()
+	func main() {
+		port := "8080"
+		mux := http.NewServeMux()
 
-	// Example endpoint
-	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		w.Write([]byte("Hello, World!")) //
-	})
+		// Example endpoint
+		mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+			w.Write([]byte("Hello, World!")) //
+		})
 
-	server := &http.Server{
-		Addr:         ":" + port,
-		Handler:      mux,
-		ReadTimeout:  10 * time.Second,
-		WriteTimeout: 10 * time.Second,
-		IdleTimeout:  30 * time.Second,
+		server := &http.Server{
+			Addr:         ":" + port,
+			Handler:      mux,
+			ReadTimeout:  10 * time.Second,
+			WriteTimeout: 10 * time.Second,
+			IdleTimeout:  30 * time.Second,
+		}
+
+		log.Printf("Starting server on port %s...", port)
+		if err := server.ListenAndServe(); err != nil {
+			log.Fatalf("Server failed: %s", err)
+		}
 	}
-
-	log.Printf("Starting server on port %s...", port)
-	if err := server.ListenAndServe(); err != nil {
-		log.Fatalf("Server failed: %s", err)
-	}
-}
 */
+
 package main
 
 import (
