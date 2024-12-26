@@ -30,16 +30,13 @@ jobs:
           ./gosec ./...
 
       # Set up Snyk
-      - name: Set up Snyk
-        uses: snyk/actions/setup@v2
-        with:
-          version: 'latest'
-
-      # Run Snyk Test
-      - name: Run Snyk Test
-        run: snyk test
+      - uses: actions/checkout@master
+      - name: Run Snyk to check for vulnerabilities
+        uses: snyk/actions/golang@master
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        with:
+          args: --severity-threshold=high
 
       # Run SonarQube (if using SonarCloud)
       - name: Run SonarQube Analysis
