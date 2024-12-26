@@ -1,9 +1,9 @@
+/*
 package main
 
 import (
-	"log"
-	"net/http"
-	"time"
+	"errors"
+	"fmt"
 )
 
 func main() {
@@ -12,7 +12,7 @@ func main() {
 
 	// Example endpoint
 	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		w.Write([]byte("Hello, World!"))
+		w.Write([]byte("Hello, World!")) //
 	})
 
 	server := &http.Server{
@@ -27,4 +27,25 @@ func main() {
 	if err := server.ListenAndServe(); err != nil {
 		log.Fatalf("Server failed: %s", err)
 	}
+}
+*/
+package main
+
+import (
+	"errors"
+	"fmt"
+)
+
+func riskyOperation() error {
+	return errors.New("something went wrong")
+}
+
+func main() {
+	err := riskyOperation()
+	if err != nil {
+		// Proper error handling
+		fmt.Printf("Operation failed: %v\n", err)
+		return
+	}
+	fmt.Println("Operation succeeded")
 }
