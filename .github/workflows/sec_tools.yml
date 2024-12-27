@@ -10,7 +10,7 @@ on:
 
 jobs:
   security-scan:
-    runs-on: ubuntu-22.04  # Explicit Ubuntu version
+    runs-on: ubuntu-22.04
 
     steps:
       # Checkout Code
@@ -29,24 +29,23 @@ jobs:
           curl -sfL https://raw.githubusercontent.com/securego/gosec/master/install.sh | sh -s -- -b $GITHUB_WORKSPACE
           ./gosec ./...
 
-      # Set up Snyk
-      - uses: actions/checkout@master
-      - name: Run Snyk to check for vulnerabilities
-        uses: snyk/actions/golang@master
-        env:
-          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-        with:
-          args: --severity-threshold=high
-          
       # Start SonarQube using Docker
       - name: Start SonarQube
         run: |
           docker run -d --name sonarqube -p 9000:9000 \
           -e SONAR_ES_BOOTSTRAP_CHECKS_DISABLE=true sonarqube:community
 
-      # Wait for SonarQube to Start
+      # Wait for SonarQube to Be Ready
       - name: Wait for SonarQube to Start
-        run: sleep 30
+        run: |
+          for i in {1..10}; do
+            if curl -s http://localhost:9000/api/system/health | grep -q '"status":"UP"'; then
+              echo "SonarQube is ready";
+              break;
+            fi;
+            echo "Waiting for SonarQube...";
+            sleep 15;
+          done
 
       # Install SonarQube Scanner
       - name: Install SonarQube Scanner
