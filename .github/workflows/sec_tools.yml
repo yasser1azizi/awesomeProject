@@ -47,6 +47,11 @@ jobs:
             sleep 15;
           done
 
+      # Display SonarQube Logs (Debug Step)
+      - name: Display SonarQube Logs
+        run: |
+          docker logs sonarqube
+        
       # Install SonarQube Scanner
       - name: Install SonarQube Scanner
         run: |
@@ -62,5 +67,3 @@ jobs:
             -Dsonar.sources=. \
             -Dsonar.host.url=http://localhost:9000 \
             -Dsonar.login=${{ secrets.SONAR_TOKEN }}
-
-            ########################
