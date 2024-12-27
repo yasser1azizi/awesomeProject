@@ -30,23 +30,39 @@ jobs:
           ./gosec ./...
 
       # Set up Snyk
-      - uses: actions/checkout@master
-      - name: Run Snyk to check for vulnerabilities
-        uses: snyk/actions/golang@master
+      - name: Install and Run Snyk
+        uses: snyk/actions/setup@v2
+        with:
+          version: 'latest'
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-        with:
-#          args: --severity-threshold=high
-          args: --severity-threshold=low
-
-
-      # Run SonarQube (if using SonarCloud)
-      - name: Run SonarQube Analysis
-        uses: sonarsource/sonarcloud-github-action@master
+      - name: Run Snyk to Check for Vulnerabilities
+        run: snyk test --severity-threshold=low
         env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        with:
-          args: >
-            -Dsonar.projectKey=my-project
-            -Dsonar.organization=my-org
-            -Dsonar.sources=.
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+
+      # Start SonarQube using Docker
+      - name: Start SonarQube
+        run: |
+          docker run -d --name sonarqube -p 9000:9000 \
+          -e SONAR_ES_BOOTSTRAP_CHECKS_DISABLE=true sonarqube:community
+
+      # Wait for SonarQube to Start
+      - name: Wait for SonarQube to Start
+        run: sleep 30
+
+      # Install SonarQube Scanner
+      - name: Install SonarQube Scanner
+        run: |
+          curl -o sonar-scanner.zip https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.8.0.2856-linux.zip
+          unzip sonar-scanner.zip -d $HOME
+          echo "PATH=$HOME/sonar-scanner-4.8.0.2856-linux/bin:$PATH" >> $GITHUB_ENV
+
+      # Run SonarQube Analysis
+      - name: Run SonarQube Analysis
+        run: |
+          sonar-scanner \
+            -Dsonar.projectKey=my-project \
+            -Dsonar.sources=. \
+            -Dsonar.host.url=http://localhost:9000 \
+            -Dsonar.login=${{ secrets.SONAR_TOKEN }}
