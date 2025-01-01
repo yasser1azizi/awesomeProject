@@ -23,6 +23,9 @@ jobs:
         with:
          java-version: '17'
          distribution: 'adopt'
+        env:
+          JAVA_HOME: /usr/lib/jvm/java-17-openjdk
+          PATH: /usr/lib/jvm/java-17-openjdk/bin:$PATH
 
       # Run Semgrep
       - name: Run Semgrep
@@ -62,9 +65,10 @@ jobs:
       # Install SonarQube Scanner
       - name: Install SonarQube Scanner
         run: |
-          curl -o sonar-scanner.zip https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.8.0.2856-linux.zip
-          unzip sonar-scanner.zip -d $HOME
-          echo "PATH=$HOME/sonar-scanner-4.8.0.2856-linux/bin:$PATH" >> $GITHUB_ENV
+              curl -o sonar-scanner.zip https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.8.0.2856-linux.zip
+              unzip sonar-scanner.zip -d $HOME
+              echo "JAVA_HOME=/usr/lib/jvm/java-17-openjdk" >> $GITHUB_ENV
+              echo "PATH=$HOME/sonar-scanner-4.8.0.2856-linux/bin:$JAVA_HOME/bin:$PATH" >> $GITHUB_ENV
 
       # Run SonarQube Analysis
       - name: Run SonarQube Analysis
