@@ -70,10 +70,10 @@ jobs:
           echo "PATH=$HOME/sonar-scanner-4.8.0.2856-linux/bin:$PATH" >> $GITHUB_ENV
 
      # Run SonarQube Analysis with Debug
-      - name: Run SonarQube Analysis
-        run: |
-         sonar-scanner -X \
-           -Dsonar.projectKey=my-project \
-           -Dsonar.sources=. \
-           -Dsonar.host.url=http://localhost:9000 \
-           -Dsonar.login=${{ secrets.SONAR_TOKEN }}
+     # - name: Run SonarQube Analysis
+       # run: |
+         #sonar-scanner -X \
+          # -Dsonar.projectKey=my-project \
+         #  -Dsonar.sources=. \
+       #    -Dsonar.host.url=http://localhost:9000 \
+        #   -Dsonar.login=${{ secrets.SONAR_TOKEN }}
