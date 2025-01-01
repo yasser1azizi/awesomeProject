@@ -28,38 +28,34 @@ jobs:
           java-version: '17'
           distribution: 'adopt'
 
-     # . Install Go
+      # 4. Install Go
       - name: Set up Go
         uses: actions/setup-go@v4
         with:
-         go-version: '1.20' # Adjust the version based on your project requirements
+          go-version: '1.20' # Adjust the version based on your project requirements
 
-      # 4. Run SonarQube Scanner
-      - name: Run SonarQube Scanner
-        run: |
-
-      # 4. Run Semgrep
+      # 5. Run Semgrep
       - name: Run Semgrep
         uses: returntocorp/semgrep-action@v1
         with:
           config: "p/r2c-ci"
 
-      # 5. Run GoSec
+      # 6. Run GoSec
       - name: Run GoSec
         run: |
           curl -sfL https://raw.githubusercontent.com/securego/gosec/master/install.sh | sh -s -- -b $GITHUB_WORKSPACE
           ./gosec ./...
 
-      # 6. Start SonarQube using Docker
+      # 7. Start SonarQube using Docker
       - name: Start SonarQube
         run: |
           docker run -d --name sonarqube -p 9000:9000 \
           -e SONAR_ES_BOOTSTRAP_CHECKS_DISABLE=true sonarqube:community
 
-      # 7. Wait for SonarQube to Be Ready
+      # 8. Wait for SonarQube to Be Ready
       - name: Wait for SonarQube to Start
         run: |
-          for i in {1..2}; do
+          for i in {1..10}; do
             if curl -s http://localhost:9000/api/system/health | grep -q '"status":"UP"'; then
               echo "SonarQube is ready";
               break;
@@ -68,28 +64,28 @@ jobs:
             sleep 15;
           done
 
-      # 8. Display SonarQube Logs (Optional Debug Step)
+      # 9. Display SonarQube Logs (Optional Debug Step)
       - name: Display SonarQube Logs
         run: docker logs sonarqube
-        
-      # 9. Install SonarQube Scanner
+
+      # 10. Install SonarQube Scanner
       - name: Install SonarQube Scanner
         run: |
           curl -o sonar-scanner.zip https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.8.0.2856-linux.zip
           unzip sonar-scanner.zip -d $HOME
           echo "PATH=$HOME/sonar-scanner-4.8.0.2856-linux/bin:$PATH" >> $GITHUB_ENV
 
-     # Run SonarQube Analysis with Debug
-     # - name: Run SonarQube Analysis
-       # run: |
-         #sonar-scanner -X \
-          # -Dsonar.projectKey=my-project \
-         #  -Dsonar.sources=. \
-       #    -Dsonar.host.url=http://localhost:9000 \
-        #   -Dsonar.login=${{ secrets.SONAR_TOKEN }}
+      # 11. Run SonarQube Analysis
+      - name: Run SonarQube Analysis
+        run: |
+          sonar-scanner \
+            -Dsonar.projectKey=my-project \
+            -Dsonar.sources=. \
+            -Dsonar.host.url=http://localhost:9000 \
+            -Dsonar.login=${{ secrets.SONAR_TOKEN }}
 
-      - uses: actions/checkout@master
-      - name: Run Snyk to check for vulnerabilities
+      # 12. Run Snyk for Vulnerability Scanning
+      - name: Run Snyk to Check for Vulnerabilities
         uses: snyk/actions/golang@master
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
