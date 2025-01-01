@@ -28,6 +28,16 @@ jobs:
           java-version: '17'
           distribution: 'adopt'
 
+     # . Install Go
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+         go-version: '1.20' # Adjust the version based on your project requirements
+
+      # 4. Run SonarQube Scanner
+      - name: Run SonarQube Scanner
+        run: |
+
       # 4. Run Semgrep
       - name: Run Semgrep
         uses: returntocorp/semgrep-action@v1
