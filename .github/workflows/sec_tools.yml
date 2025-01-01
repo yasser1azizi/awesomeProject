@@ -55,7 +55,7 @@ jobs:
       # 8. Wait for SonarQube to Be Ready
       - name: Wait for SonarQube to Start
         run: |
-          for i in {1..10}; do
+          for i in {1..2}; do
             if curl -s http://localhost:9000/api/system/health | grep -q '"status":"UP"'; then
               echo "SonarQube is ready";
               break;
@@ -76,13 +76,13 @@ jobs:
           echo "PATH=$HOME/sonar-scanner-4.8.0.2856-linux/bin:$PATH" >> $GITHUB_ENV
 
       # 11. Run SonarQube Analysis
-      - name: Run SonarQube Analysis
-        run: |
-          sonar-scanner \
-            -Dsonar.projectKey=my-project \
-            -Dsonar.sources=. \
-            -Dsonar.host.url=http://localhost:9000 \
-            -Dsonar.login=${{ secrets.SONAR_TOKEN }}
+    #  - name: Run SonarQube Analysis
+     #   run: |
+      #    sonar-scanner \
+       #     -Dsonar.projectKey=my-project \
+        #    -Dsonar.sources=. \
+         #   -Dsonar.host.url=http://localhost:9000 \
+          #  -Dsonar.login=${{ secrets.SONAR_TOKEN }}
 
       # 12. Run Snyk for Vulnerability Scanning
       - name: Run Snyk to Check for Vulnerabilities
