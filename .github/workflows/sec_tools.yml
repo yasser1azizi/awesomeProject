@@ -81,7 +81,7 @@ jobs:
       # 11. Run SonarQube Analysis
       - name: Run SonarQube Analysis
         run: |
-          sonar-scanner \
+          sonar-scanner -X \
             -Dsonar.projectKey=my-project \
             -Dsonar.sources=. \
             -Dsonar.host.url=http://localhost:9000 \
