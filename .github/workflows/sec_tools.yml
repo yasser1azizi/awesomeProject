@@ -78,7 +78,7 @@ jobs:
           unzip sonar-scanner.zip -d $HOME
           echo "PATH=$HOME/sonar-scanner-4.8.0.2856-linux/bin:$PATH" >> $GITHUB_ENV
 
-      # 11. Run SonarQube Analysis
+      ##11. Run SonarQube Analysis
       - name: Run SonarQube Analysis
         run: |
           sonar-scanner \
