@@ -75,7 +75,10 @@ jobs:
             -Dsonar.projectKey=awesomeProject \
             -Dsonar.sources=. \
             -Dsonar.host.url=http://localhost:9000 \
-            -Dsonar.login=${{ secrets.SONAR_TOKEN }}
+            -Dsonar.login=${{ secrets.SONAR_TOKEN1}}
+
+
+
 
       # 10. Run Snyk for Vulnerability Scanning
       - name: Run Snyk to Check for Vulnerabilities
