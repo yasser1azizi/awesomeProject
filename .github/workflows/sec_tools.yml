@@ -72,7 +72,7 @@ jobs:
       - name: Run SonarQube Analysis
         run: |
           sonar-scanner -X \
-            -Dsonar.projectKey=my-project \
+            -Dsonar.projectKey=awesomeProject \
             -Dsonar.sources=. \
             -Dsonar.host.url=http://localhost:9000 \
             -Dsonar.login=${{ secrets.SONAR_TOKEN }}
