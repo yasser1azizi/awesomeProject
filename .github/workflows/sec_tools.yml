@@ -75,7 +75,7 @@ jobs:
             -Dsonar.projectKey=awesomeProject \
             -Dsonar.sources=. \
             -Dsonar.host.url=http://localhost:9000 \
-            -Dsonar.login=${{ secrets.SONAR_TOKEN1}}
+            -Dsonar.login=${{ secrets.SONAR_TOKEN2 }}
 
 
 
