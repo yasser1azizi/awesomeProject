@@ -46,8 +46,8 @@ jobs:
       # 6. Run GoSec
       - name: Run GoSec
         run: |
-          curl -sfL https://raw.githubusercontent.com/securego/gosec/master/install.sh | sh -s -- -b $GITHUB_WORKSPACE
-          ./gosec ./...
+          go install github.com/securego/gosec/v2/cmd/gosec@latest
+          $HOME/go/bin/gosec ./...
 
       # 7. Run SonarCloud Analysis
       - name: SonarCloud Scan
@@ -58,8 +58,8 @@ jobs:
           args: >
             -Dsonar.projectKey=yasser1azizi
             -Dsonar.organization=yasser1azizi_awesomeProject
-            -Dsonar.sources=src \
-            -Dsonar.java.binaries=./build/classes # Adjust if not a Java project
+            -Dsonar.sources=.
+            -Dsonar.language=go
 
       # 8. Run Snyk for Vulnerability Scanning
       - name: Run Snyk to Check for Vulnerabilities
