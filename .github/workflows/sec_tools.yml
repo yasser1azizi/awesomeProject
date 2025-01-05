@@ -49,38 +49,19 @@ jobs:
           curl -sfL https://raw.githubusercontent.com/securego/gosec/master/install.sh | sh -s -- -b $GITHUB_WORKSPACE
           ./gosec ./...
 
-      # 7. Wait for Local SonarQube to Be Ready
-      - name: Wait for SonarQube to Start
-        run: |
-          for i in {1..2}; do
-            if curl -s http://localhost:9000/api/system/health | grep -q '"status":"UP"'; then
-              echo "SonarQube is ready";
-              break;
-            fi;
-            echo "Waiting for SonarQube...";
-            sleep 5;
-          done
+      # 7. Run SonarCloud Analysis
+      - name: SonarCloud Scan
+        uses: sonarsource/sonarcloud-github-action@v1.10
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }} # Add your SonarCloud token in the GitHub repository secrets
+        with:
+          args: >
+            -Dsonar.projectKey=yasser1azizi
+            -Dsonar.organization=yasser1azizi_awesomeProject
+            -Dsonar.sources=src \
+            -Dsonar.java.binaries=./build/classes # Adjust if not a Java project
 
-      # 8. Install SonarQube Scanner
-      - name: Install SonarQube Scanner
-        run: |
-          curl -o sonar-scanner.zip https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.8.0.2856-linux.zip
-          unzip sonar-scanner.zip -d $HOME
-          echo "PATH=$HOME/sonar-scanner-4.8.0.2856-linux/bin:$PATH" >> $GITHUB_ENV
-
-      # 9. Run SonarQube Analysis
-      - name: Run SonarQube Analysis
-        run: |
-          sonar-scanner -X \
-            -Dsonar.projectKey=key\
-            -Dsonar.sources=. \
-            -Dsonar.host.url=http://localhost:9000 \
-            -Dsonar.login=${{ secrets.SONAR_TOKEN }}
-
-
-
-
-      # 10. Run Snyk for Vulnerability Scanning
+      # 8. Run Snyk for Vulnerability Scanning
       - name: Run Snyk to Check for Vulnerabilities
         uses: snyk/actions/golang@master
         env:
