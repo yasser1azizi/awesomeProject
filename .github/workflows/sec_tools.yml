@@ -49,17 +49,18 @@ jobs:
           go install github.com/securego/gosec/v2/cmd/gosec@latest
           $HOME/go/bin/gosec ./...
 
-      # 7. Run SonarCloud Analysis
-      - name: SonarCloud Scan
-        uses: sonarsource/sonarcloud-github-action@v2
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}  # Add your SonarCloud token in the GitHub repository secrets
-        with:
-          args: >
-            -Dsonar.projectKey=yasser1azizi
-            -Dsonar.organization=yasser1azizi_awesomeProject
-            -Dsonar.sources=.
-            -Dsonar.language=go
+    #  # 7. Run SonarCloud Analysis
+     # - name: SonarCloud Scan
+      #  uses: sonarsource/sonarcloud-github-action@v2
+       # env:
+       #   SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}  # Add your SonarCloud token in the GitHub repository secrets
+       # with:
+        #  args: >
+         #   -Dsonar.projectKey=yasser1azizi
+          #  -Dsonar.organization=yasser1azizi_awesomeProject
+           # -Dsonar.sources=.
+            #
+            #-Dsonar.language=go
 
       # 8. Run Snyk for Vulnerability Scanning
       - name: Run Snyk to Check for Vulnerabilities
