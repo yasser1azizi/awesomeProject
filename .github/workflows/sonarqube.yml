@@ -32,8 +32,8 @@ jobs:
       - name: SonarQube Scan
         run: |
           sonar-scanner \
-            -Dsonar.projectKey=yasser1azizi\
-            -Dsonar.organization=yasser1azizi_awesomeProject \
+            -Dsonar.projectKey=yasser1azizi_awesomeProject \
+            -Dsonar.organization=yasser1azizi \
             -Dsonar.host.url=https://sonarcloud.io \
             -Dsonar.login=${{ secrets.SONAR_TOKEN }} \
             -Dsonar.github.repository=${{ github.repository }} \
@@ -42,3 +42,4 @@ jobs:
       # 5. Display SonarQube Logs (Optional Debug Step)
       - name: Display SonarQube Logs
         run: cat .scannerwork/report-task.txt
+        
