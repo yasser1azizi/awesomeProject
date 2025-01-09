@@ -60,7 +60,7 @@ jobs:
           #  -Dsonar.organization=yasser1azizi_awesomeProject
            # -Dsonar.sources=.
             #
-            #-Dsonar.language=go
+            #-Dsonar.language=go 
 
       # 8. Run Snyk for Vulnerability Scanning
       - name: Run Snyk to Check for Vulnerabilities
@@ -69,3 +69,6 @@ jobs:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         with:
           args: --severity-threshold=high
+
+
+          
