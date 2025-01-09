@@ -21,13 +21,25 @@ jobs:
           java-version: '11'
           distribution: 'temurin'
 
-      # 3. Run SonarQube Analysis
+      # 3. Install SonarScanner CLI
+      - name: Install SonarScanner CLI
+        run: |
+          curl -o sonar-scanner.zip https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.8.0.2856-linux.zip
+          unzip sonar-scanner.zip -d $HOME
+          echo "PATH=$HOME/sonar-scanner-4.8.0.2856-linux/bin:$PATH" >> $GITHUB_ENV
+
+      # 4. Run SonarQube Analysis
       - name: SonarQube Scan
         run: |
           sonar-scanner \
-            -Dsonar.projectKey=your_project_key \
-            -Dsonar.organization=your_organization \
+            -Dsonar.projectKey=my_project \
+            -Dsonar.organization=my_organization \
             -Dsonar.host.url=https://sonarcloud.io \
             -Dsonar.login=${{ secrets.SONAR_TOKEN }} \
             -Dsonar.github.repository=${{ github.repository }} \
             -Dsonar.github.prKey=${{ github.event.pull_request.number }}
+
+      # 5. Display SonarQube Logs (Optional Debug Step)
+      - name: Display SonarQube Logs
+        run: cat .scannerwork/report-task.txt
+        
