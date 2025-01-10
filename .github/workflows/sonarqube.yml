@@ -33,16 +33,21 @@ jobs:
 
       # 4. Run SonarCloud Analysis
       - name: Run SonarCloud Scan
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          PULL_REQUEST_KEY: ${{ github.event.pull_request.number }}
+          PULL_REQUEST_BRANCH: ${{ github.head_ref }}
+          PULL_REQUEST_BASE: ${{ github.base_ref }}
         run: |
           sonar-scanner \
             -Dsonar.projectKey=yasser1azizi_awesomeProject \
             -Dsonar.organization=yasser1azizi \
             -Dsonar.host.url=https://sonarcloud.io \
-            -Dsonar.login=${{ secrets.SONAR_TOKEN }} \
+            -Dsonar.login="$SONAR_TOKEN" \
             -Dsonar.sources=. \
-            -Dsonar.pullrequest.key=${{ github.event.pull_request.number }} \
-            -Dsonar.pullrequest.branch=${{ github.head_ref }} \
-            -Dsonar.pullrequest.base=${{ github.base_ref }}
+            -Dsonar.pullrequest.key="$PULL_REQUEST_KEY" \
+            -Dsonar.pullrequest.branch="$PULL_REQUEST_BRANCH" \
+            -Dsonar.pullrequest.base="$PULL_REQUEST_BASE"
 
       # Optional: Display Logs
       - name: Display SonarScanner Logs
