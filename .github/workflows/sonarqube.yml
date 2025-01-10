@@ -20,7 +20,8 @@ jobs:
         uses: actions/setup-java@v3
         with:
           java-version: '11'
-
+          distribution: 'temurin' # Replace with your desired distribution if needed
+          
       - name: SonarQube Scan
         uses: SonarSource/sonarqube-scan-action@v4.2.1
         env:
