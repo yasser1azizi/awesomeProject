@@ -3,7 +3,7 @@ name: Security Tools Scan
 on:
   push:
     branches:
-      - "newfile"
+      - "testfile"
   pull_request:
     branches:
       - main
