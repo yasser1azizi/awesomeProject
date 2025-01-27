@@ -1,57 +1,41 @@
-name: CI Pipeline with Security Tools
+name: Security Tools Scan
 
 on:
   push:
     branches:
-      - main
+      - "feat/scan_tools"
   pull_request:
     branches:
       - main
 
 jobs:
-  security-scan:
-    runs-on: ubuntu-22.04  # Explizite Angabe der Ubuntu-Version
-
+  security-scans:
+    runs-on: ubuntu-22.04
     steps:
-      # Checkout Code
-      - name: Checkout Code
+      - name: Code auschecken
         uses: actions/checkout@v3
 
-      # Run Semgrep
-      - name: Run Semgrep
+      - name: Go installieren
+        uses: actions/setup-go@v4
+        with:
+          go-version: '1.20'
+
+      - name: Go Bin zum PATH hinzufügen
+        run: echo "$HOME/go/bin" >> $GITHUB_PATH
+
+      - name: Semgrep ausführen
         uses: returntocorp/semgrep-action@v1
         with:
           config: "p/r2c-ci"
 
-      # Run GoSec
-      - name: Run GoSec
-        run: |
-          curl -sfL https://raw.githubusercontent.com/securego/gosec/master/install.sh | sh -s -- -b $GITHUB_WORKSPACE
-          ./gosec ./...
+      - name: GoSec installieren
+        run: go install github.com/securego/gosec/v2/cmd/gosec@latest
 
-       #Set up Snyk
-      - name: Set up Snyk
+      - name: GoSec ausführen
+        run: $HOME/go/bin/gosec ./...
 
-        with:
-          version: 'latest'
-        env:
-         SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+      - name: Go-Critic installieren
+        run: go install github.com/go-critic/go-critic/cmd/gocritic@latest
 
-      # Run Snyk Test
-       - name: Run Snyk Test
-        
-         run: snyk test
-        env:
-          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-
-      # Run SonarQube (if using SonarCloud)
-      - name: Run SonarQube Analysis
-        uses: sonarsource/sonarcloud-github-action@master
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        with:
-          args: >
-            -Dsonar.projectKey=key 
-            -Dsonar.organization=code_awasom 
-            -Dsonar.sources=.
-            #
+      - name: Go-Critic ausführen
+        run: $HOME/go/bin/gocritic check-project ./... 
