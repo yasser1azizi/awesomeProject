@@ -35,7 +35,7 @@ jobs:
         run: echo "$HOME/go/bin" >> $GITHUB_PATH
 
       - name: Install GoSec
-        run: go install github.com/securego/gosec/v2/cmd/gosec@latest
+        run: go install github.com/securego/gosec/v2/cmd/gosec@v2.17.0
 
       - name: Run GoSec
         run: $HOME/go/bin/gosec ./...
